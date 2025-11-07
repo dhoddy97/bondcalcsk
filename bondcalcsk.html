@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SK Bond Calculator</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f6f9ff;
+    color: #111;
+    padding: 20px;
+    max-width: 550px;
+    margin: auto;
+  }
+  h2 {
+    text-align: center;
+    color: #003399;
+    margin-bottom: 20px;
+  }
+  label {
+    font-weight: bold;
+    display: block;
+    margin-top: 15px;
+  }
+  input {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    margin-top: 5px;
+    box-sizing: border-box;
+  }
+  button {
+    margin-top: 15px;
+    width: 100%;
+    background-color: #003399;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: #002266;
+  }
+  .note {
+    color: red;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: white;
+  }
+  th, td {
+    border: 1px solid black;
+    text-align: right;
+    padding: 8px;
+    font-size: 16px;
+  }
+  th {
+    background-color: #dce3f7;
+    text-align: center;
+  }
+  td:first-child, th:first-child {
+    text-align: center;
+  }
+  .peso {
+    text-align: center;
+    width: 30px;
+  }
+</style>
+</head>
+<body>
+
+<h2>SK CHAIRMAN AND SK TREASURER BOND CALCULATOR</h2>
+
+<label for="budget">Annual Budget (Barangay):</label>
+<input type="number" id="budget" placeholder="Enter annual budget">
+
+<button onclick="calculateSKBond()">Calculate</button>
+
+<p class="note" id="note"></p>
+
+<table id="resultTable" style="display:none;">
+  <tr>
+    <th>Maximum Accountability</th>
+    <th>Amount of Bond</th>
+    <th>Bond Premium</th>
+  </tr>
+  <tr>
+    <td><span class="peso">₱</span><span id="maxAccount">0.00</span></td>
+    <td><span class="peso">₱</span><span id="bondAmount">0.00</span></td>
+    <td><span class="peso">₱</span><span id="bondPremium">0.00</span></td>
+  </tr>
+</table>
+
+<script>
+function formatPeso(value) {
+  return value.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function getBondAmount(maxAccount) {
+  if (maxAccount <= 12000) return 10000;
+  else if (maxAccount <= 15000) return 11250;
+  else if (maxAccount <= 18000) return 13500;
+  else if (maxAccount <= 21000) return 16750;
+  else if (maxAccount <= 25000) return 18900;
+  else if (maxAccount <= 30000) return 22500;
+  else if (maxAccount <= 35000) return 26250;
+  else if (maxAccount <= 40000) return 30000;
+  else if (maxAccount <= 50000) return 37500;
+  else if (maxAccount <= 60000) return 45000;
+  else if (maxAccount <= 80000) return 60000;
+  else if (maxAccount <= 100000) return 75000;
+  else if (maxAccount <= 250000) return 100000;
+  else if (maxAccount <= 500000) return 225000;
+  else if (maxAccount <= 750000) return 350250;
+  else if (maxAccount <= 1000000) return 500000;
+  else if (maxAccount <= 2500000) return 750000;
+  else if (maxAccount <= 5000000) return 1500000;
+  else if (maxAccount <= 25000000) return 3500000;
+  else if (maxAccount <= 75000000) return 4000000;
+  else if (maxAccount <= 100000000) return 5000000;
+  else if (maxAccount <= 500000000) return 8000000;
+  else if (maxAccount <= 1000000000) return 11000000;
+  else return 11000000;
+}
+
+function calculateSKBond() {
+  const budgetInput = document.getElementById('budget');
+  const note = document.getElementById('note');
+  const table = document.getElementById('resultTable');
+
+  let budget = parseFloat(budgetInput.value);
+
+  if (isNaN(budget) || budget <= 0) {
+    note.textContent = "⚠️ Please enter a valid Annual Budget amount.";
+    table.style.display = "none";
+    return;
+  }
+
+  note.textContent = "";
+
+  // Computation
+  const monthly = budget / 12;
+  const maxAccount = monthly * 0.1;
+  const bondAmount = getBondAmount(maxAccount);
+  const bondPremium = bondAmount * 0.015;
+
+  // Display
+  document.getElementById('maxAccount').textContent = formatPeso(maxAccount);
+  document.getElementById('bondAmount').textContent = formatPeso(bondAmount);
+  document.getElementById('bondPremium').textContent = formatPeso(bondPremium);
+  table.style.display = "table";
+}
+</script>
+
+</body>
+</html>
